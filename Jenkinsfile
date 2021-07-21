@@ -12,6 +12,7 @@ pipeline {
           archiveArtifacts artifacts:'**/traget/*.war'
         }
        }
+      }
        stage ('Build'){
         steps {
           echo "Build step"
@@ -28,5 +29,4 @@ pipeline {
         }        
        }
     }
-}
 }
