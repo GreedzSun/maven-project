@@ -13,7 +13,7 @@ pipeline {
         }
        }
       }
-       stage ('Build'){
+       stage ('Buildo'){
         steps {
           echo "Build step"
         }        
