@@ -6,8 +6,7 @@ pipeline {
       stage ('Build'){
         steps {
           sh 'mvn clean package'
-          echo "Maven build step..."
-        }        
+          }        
         post {
           success{
           echo "Archiving.."
@@ -15,20 +14,18 @@ pipeline {
         }
        }
       }
-       stage ('Buildo'){
+       stage ('Deploy to staging'){
         steps {
-          echo "Build step"
-        }        
+          build job:'deploy_to_staging'
+          }        
        }
-      stage ('Deploy'){
+       stage ('Deploy to prod'){
         steps {
-          echo "Deploy step"
-        }        
-       }
-      stage ('End'){
-        steps {
-          echo "End step"
-        }        
+          timeout (time:5. unit:'DAYS')
+          input message:'Approve Prod deployment?'
+        }
+          build job:'deploy_to_prod'
+          }        
        }
     }
 }
