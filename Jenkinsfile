@@ -19,7 +19,7 @@ pipeline {
       }
        stage ('Deployments'){
          parallel{
-           stage ('Deplot to Staging'){
+           stage ('Deploy to Staging'){
             steps {
             	sh "cp **/target/*.war /home/bi/apache-tomcat-9.0.50/webapps"
             }        
