@@ -1,5 +1,8 @@
 pipeline {
   agent any
+  triggers{
+    pollSCM('*/5 * * * *')
+  }
   tools {maven "localMaven"
   }
   stages{
@@ -14,18 +17,22 @@ pipeline {
         }
        }
       }
-       stage ('Deploy to staging'){
-        steps {
-          build job:'deploy_to_staging'
-          }        
-       }
-       stage ('Deploy to prod'){
-        steps {
-          timeout (time:5, unit:'DAYS'){
-          input message:'Approve Prod deployment?'
-        }
-          build job:'deploy_to_prod'
-          }        
+       stage ('Deployments'){
+         parallel{
+           stage ('Deplot to Staging'){
+            steps {
+            	sh "cp **/target/*.war /home/bi/apache-tomcat-9.0.50/webapps"
+            }        
+           }
+           stage ('Deploy to prod'){
+            steps {
+            timeout (time:5, unit:'DAYS'){
+            input message:'Approve Prod deployment?'
+           }
+           		sh "cp **/target/*.war /home/bi/tomcat-prod/webapps"
+          }
        }
     }
+}
+}
 }
